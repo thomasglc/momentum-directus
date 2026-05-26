@@ -1,0 +1,17 @@
+services:
+    directus:
+      image: directus/directus:latest
+      ports:
+        - "8056:8055"
+      environment:
+        SECRET: "latronspem-momentum"
+        DB_CLIENT: "sqlite3"
+        DB_FILENAME: "/directus/database/data.db"
+        ADMIN_EMAIL: "thomas.galocha@hotmail.fr"
+        ADMIN_PASSWORD: "thomas67"
+        CORS_ENABLED: "true"
+        CORS_ORIGIN: "true"
+      volumes:
+        - ./uploads:/directus/uploads
+        - ./extensions:/directus/extensions
+        - ./database:/directus/database

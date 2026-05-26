@@ -1,17 +1,88 @@
 services:
-    directus:
-      image: directus/directus:latest
-      ports:
-        - "8056:8055"
-      environment:
-        SECRET: "latronspem-momentum"
-        DB_CLIENT: "sqlite3"
-        DB_FILENAME: "/directus/database/data.db"
-        ADMIN_EMAIL: "thomas.galocha@hotmail.fr"
-        ADMIN_PASSWORD: "thomas67"
-        CORS_ENABLED: "true"
-        CORS_ORIGIN: "true"
-      volumes:
-        - ./uploads:/directus/uploads
-        - ./extensions:/directus/extensions
-        - ./database:/directus/database
+
+  # ── Directus ────────────────────────────────────────────────────────────────
+  directus:
+    image: directus/directus:11
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8056:8055"   # écoute uniquement en local — mettre un reverse proxy devant
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    environment:
+      # Sécurité
+      SECRET: ${SECRET}
+      ACCESS_TOKEN_TTL: "15m"
+      REFRESH_TOKEN_TTL: "7d"
+      REFRESH_TOKEN_COOKIE_SECURE: "true"
+      REFRESH_TOKEN_COOKIE_SAME_SITE: "strict"
+
+      # Base de données
+      DB_CLIENT: "pg"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      # Rate limiting en mémoire
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_STORE: "memory"
+      RATE_LIMITER_POINTS: "50"
+      RATE_LIMITER_DURATION: "1"
+
+      # CORS — restreindre à ton domaine front
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      CORS_METHODS: "GET,POST,PATCH,DELETE"
+      CORS_ALLOWED_HEADERS: "Content-Type,Authorization"
+
+      # Application
+      PUBLIC_URL: ${PUBLIC_URL}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      # Désactiver la télémétrie
+      TELEMETRY: "false"
+
+      # Logs réduits en prod
+      LOG_LEVEL: "warn"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - public
+      - internal
+
+  # ── PostgreSQL ───────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - internal           # jamais exposé vers l'extérieur
+
+# ── Réseaux ──────────────────────────────────────────────────────────────────
+networks:
+  public:
+  internal:
+    internal: true         # pas d'accès internet pour db
+
+# ── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+  directus_uploads:
+  directus_extensions:
