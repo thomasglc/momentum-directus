@@ -4,8 +4,7 @@ services:
   directus:
     image: directus/directus:11
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:8056:8055"   # écoute uniquement en local — mettre un reverse proxy devant
+    container_name: momentum-directus
     volumes:
       - directus_uploads:/directus/uploads
       - directus_extensions:/directus/extensions
@@ -52,7 +51,7 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - public
+      - proxy
       - internal
 
   # ── PostgreSQL ───────────────────────────────────────────────────────────────
@@ -77,9 +76,10 @@ services:
 
 # ── Réseaux ──────────────────────────────────────────────────────────────────
 networks:
-  public:
+  proxy:
+    external: true
   internal:
-    internal: true         # pas d'accès internet pour db
+    internal: true
 
 # ── Volumes ──────────────────────────────────────────────────────────────────
 volumes:
