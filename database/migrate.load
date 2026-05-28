@@ -1,0 +1,6 @@
+LOAD DATABASE
+     FROM sqlite:///data/data.db
+     INTO postgresql://directus:directus_local@postgres/directus
+
+WITH truncate, disable triggers, create no tables, create no indexes, no reset sequences
+;
