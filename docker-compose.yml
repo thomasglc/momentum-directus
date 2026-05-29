@@ -90,6 +90,7 @@ services:
       - TZ=Europe/Paris
     networks:
       - internal
+      - proxy
     depends_on:
       postgres:
         condition: service_healthy
