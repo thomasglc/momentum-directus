@@ -1,7 +1,7 @@
 services:
 
   # ── Directus ────────────────────────────────────────────────────────────────
-  directus:
+  momentum-directus:
     image: directus/directus:11
     restart: unless-stopped
     container_name: momentum-directus
