@@ -74,6 +74,26 @@ services:
     networks:
       - internal           # jamais exposé vers l'extérieur
 
+  # ── Backup ───────────────────────────────────────────────────────────────────
+  backup:
+    build: ./backup
+    restart: unless-stopped
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - BACKUP_BUCKET=${BACKUP_BUCKET}
+      - RCLONE_CONFIG_B2BACKUP_TYPE=b2
+      - RCLONE_CONFIG_B2BACKUP_ACCOUNT=${B2_ACCOUNT_ID}
+      - RCLONE_CONFIG_B2BACKUP_KEY=${B2_APPLICATION_KEY}
+      - TZ=Europe/Paris
+    networks:
+      - internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 # ── Réseaux ──────────────────────────────────────────────────────────────────
 networks:
   proxy:
