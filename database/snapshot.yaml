@@ -1,6 +1,6 @@
 version: 1
 directus: 11.17.4
-vendor: sqlite
+vendor: postgres
 collections:
   - collection: _v1_athlete_profiles
     meta:
@@ -770,6 +770,30 @@ collections:
       versioning: false
     schema:
       name: session_blocks
+  - collection: session_completions
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: session_completions
+      color: '#10B981'
+      display_template: null
+      group: null
+      hidden: false
+      icon: check_circle
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: session_completions
   - collection: sessions
     meta:
       accountability: all
@@ -870,12 +894,12 @@ fields:
       name: id
       table: athlete_profiles
       data_type: integer
-      default_value: null
+      default_value: nextval('athlete_profiles_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -912,8 +936,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -949,7 +973,7 @@ fields:
     schema:
       name: name
       table: athlete_profiles
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -992,8 +1016,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -1029,7 +1053,7 @@ fields:
     schema:
       name: created_at
       table: athlete_profiles
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1069,7 +1093,7 @@ fields:
     schema:
       name: updated_at
       table: athlete_profiles
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1114,7 +1138,7 @@ fields:
     schema:
       name: gender
       table: athlete_profiles
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -1154,7 +1178,7 @@ fields:
     schema:
       name: directus_user_id
       table: athlete_profiles
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -1195,12 +1219,12 @@ fields:
       name: id
       table: block_cardio
       data_type: integer
-      default_value: null
+      default_value: nextval('block_cardio_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -1245,7 +1269,7 @@ fields:
     schema:
       name: subtype
       table: block_cardio
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -1288,8 +1312,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -1340,7 +1364,7 @@ fields:
     schema:
       name: pace_zone
       table: block_cardio
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -1380,7 +1404,7 @@ fields:
     schema:
       name: label
       table: block_cardio
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -1460,7 +1484,7 @@ fields:
     schema:
       name: created_at
       table: block_cardio
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1500,7 +1524,7 @@ fields:
     schema:
       name: updated_at
       table: block_cardio
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1541,12 +1565,12 @@ fields:
       name: id
       table: block_circuit
       data_type: integer
-      default_value: null
+      default_value: nextval('block_circuit_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -1575,6 +1599,8 @@ fields:
             value: time
           - text: AMRAP
             value: amrap
+          - text: EMOM
+            value: emom
       readonly: false
       required: true
       searchable: true
@@ -1587,7 +1613,7 @@ fields:
     schema:
       name: format
       table: block_circuit
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 10
       numeric_precision: null
@@ -1627,7 +1653,7 @@ fields:
     schema:
       name: label
       table: block_circuit
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -1670,8 +1696,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -1710,8 +1736,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -1750,7 +1776,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -1827,7 +1853,7 @@ fields:
     schema:
       name: created_at
       table: block_circuit
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1867,7 +1893,7 @@ fields:
     schema:
       name: updated_at
       table: block_circuit
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -1908,12 +1934,12 @@ fields:
       name: id
       table: block_circuit_stations
       data_type: integer
-      default_value: null
+      default_value: nextval('block_circuit_stations_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -1950,8 +1976,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -1990,8 +2016,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -2030,8 +2056,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -2070,8 +2096,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -2110,8 +2136,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -2150,8 +2176,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -2190,7 +2216,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2230,7 +2256,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2267,7 +2293,7 @@ fields:
     schema:
       name: custom_label
       table: block_circuit_stations
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -2348,12 +2374,12 @@ fields:
       name: id
       table: block_intervals
       data_type: integer
-      default_value: null
+      default_value: nextval('block_intervals_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -2390,8 +2416,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -2430,7 +2456,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2470,7 +2496,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2510,7 +2536,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2562,7 +2588,7 @@ fields:
     schema:
       name: pace_zone
       table: block_intervals
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -2642,7 +2668,7 @@ fields:
     schema:
       name: created_at
       table: block_intervals
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -2682,7 +2708,7 @@ fields:
     schema:
       name: updated_at
       table: block_intervals
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -2723,12 +2749,12 @@ fields:
       name: id
       table: block_mini_race
       data_type: integer
-      default_value: null
+      default_value: nextval('block_mini_race_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -2765,8 +2791,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -2805,7 +2831,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2857,7 +2883,7 @@ fields:
     schema:
       name: pace_zone
       table: block_mini_race
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -2900,7 +2926,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -2977,7 +3003,7 @@ fields:
     schema:
       name: created_at
       table: block_mini_race
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -3017,7 +3043,7 @@ fields:
     schema:
       name: updated_at
       table: block_mini_race
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -3058,12 +3084,12 @@ fields:
       name: id
       table: block_mini_race_stations
       data_type: integer
-      default_value: null
+      default_value: nextval('block_mini_race_stations_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -3100,8 +3126,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -3140,8 +3166,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -3180,8 +3206,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3220,8 +3246,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3260,8 +3286,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3300,7 +3326,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -3340,7 +3366,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -3377,7 +3403,7 @@ fields:
     schema:
       name: custom_label
       table: block_mini_race_stations
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -3458,12 +3484,12 @@ fields:
       name: id
       table: block_station_activation
       data_type: integer
-      default_value: null
+      default_value: nextval('block_station_activation_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -3540,8 +3566,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3577,7 +3603,7 @@ fields:
     schema:
       name: created_at
       table: block_station_activation
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -3617,7 +3643,7 @@ fields:
     schema:
       name: updated_at
       table: block_station_activation
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -3658,12 +3684,12 @@ fields:
       name: id
       table: block_station_activation_entries
       data_type: integer
-      default_value: null
+      default_value: nextval('block_station_activation_entries_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -3700,8 +3726,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -3740,8 +3766,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -3780,8 +3806,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3820,8 +3846,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3860,8 +3886,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -3900,7 +3926,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -3940,7 +3966,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -3977,7 +4003,7 @@ fields:
     schema:
       name: custom_label
       table: block_station_activation_entries
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -4058,12 +4084,12 @@ fields:
       name: id
       table: block_station_block
       data_type: integer
-      default_value: null
+      default_value: nextval('block_station_block_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -4104,7 +4130,7 @@ fields:
     schema:
       name: brick_format
       table: block_station_block
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 50
       numeric_precision: null
@@ -4184,7 +4210,7 @@ fields:
     schema:
       name: created_at
       table: block_station_block
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -4224,7 +4250,7 @@ fields:
     schema:
       name: updated_at
       table: block_station_block
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -4265,12 +4291,12 @@ fields:
       name: id
       table: block_station_block_entries
       data_type: integer
-      default_value: null
+      default_value: nextval('block_station_block_entries_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -4307,8 +4333,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -4347,8 +4373,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -4387,8 +4413,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -4427,8 +4453,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -4467,8 +4493,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -4507,7 +4533,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -4547,7 +4573,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -4584,7 +4610,7 @@ fields:
     schema:
       name: custom_label
       table: block_station_block_entries
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -4665,12 +4691,12 @@ fields:
       name: id
       table: block_strength
       data_type: integer
-      default_value: null
+      default_value: nextval('block_strength_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -4707,8 +4733,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -4784,7 +4810,7 @@ fields:
     schema:
       name: created_at
       table: block_strength
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -4824,7 +4850,7 @@ fields:
     schema:
       name: updated_at
       table: block_strength
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -4865,12 +4891,12 @@ fields:
       name: id
       table: block_strength_exercises
       data_type: integer
-      default_value: null
+      default_value: nextval('block_strength_exercises_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -4907,8 +4933,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -4947,8 +4973,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -4987,8 +5013,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -5027,8 +5053,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -5067,8 +5093,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -5107,8 +5133,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -5147,7 +5173,7 @@ fields:
       data_type: real
       default_value: null
       max_length: null
-      numeric_precision: null
+      numeric_precision: 24
       numeric_scale: null
       is_nullable: true
       is_unique: false
@@ -5184,7 +5210,7 @@ fields:
     schema:
       name: custom_label
       table: block_strength_exercises
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -5265,12 +5291,12 @@ fields:
       name: id
       table: exercise_catalog
       data_type: integer
-      default_value: null
+      default_value: nextval('exercise_catalog_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -5304,7 +5330,7 @@ fields:
     schema:
       name: name
       table: exercise_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 200
       numeric_precision: null
@@ -5357,7 +5383,7 @@ fields:
     schema:
       name: category
       table: exercise_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 30
       numeric_precision: null
@@ -5410,7 +5436,7 @@ fields:
     schema:
       name: equipment
       table: exercise_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 100
       numeric_precision: null
@@ -5491,12 +5517,12 @@ fields:
       name: id
       table: plans
       data_type: integer
-      default_value: null
+      default_value: nextval('plans_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -5530,7 +5556,7 @@ fields:
     schema:
       name: title
       table: plans
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -5716,7 +5742,7 @@ fields:
     schema:
       name: sport
       table: plans
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 50
       numeric_precision: null
@@ -5765,7 +5791,7 @@ fields:
     schema:
       name: level
       table: plans
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -5812,7 +5838,7 @@ fields:
     schema:
       name: status
       table: plans
-      data_type: varchar
+      data_type: character varying
       default_value: draft
       max_length: 20
       numeric_precision: null
@@ -5852,7 +5878,7 @@ fields:
     schema:
       name: created_at
       table: plans
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -5892,7 +5918,7 @@ fields:
     schema:
       name: updated_at
       table: plans
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -5933,12 +5959,12 @@ fields:
       name: id
       table: session_blocks
       data_type: integer
-      default_value: null
+      default_value: nextval('session_blocks_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -5975,8 +6001,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -6015,8 +6041,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -6053,7 +6079,7 @@ fields:
     schema:
       name: block_type
       table: session_blocks
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 50
       numeric_precision: null
@@ -6097,8 +6123,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -6135,12 +6161,12 @@ fields:
       name: id
       table: sessions
       data_type: integer
-      default_value: null
+      default_value: nextval('sessions_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -6177,8 +6203,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -6229,7 +6255,7 @@ fields:
     schema:
       name: day
       table: sessions
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 10
       numeric_precision: null
@@ -6284,7 +6310,7 @@ fields:
     schema:
       name: type
       table: sessions
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -6364,7 +6390,7 @@ fields:
     schema:
       name: title
       table: sessions
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -6445,7 +6471,7 @@ fields:
     schema:
       name: slug
       table: sessions
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -6488,8 +6514,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -6531,8 +6557,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -6611,8 +6637,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -6648,7 +6674,7 @@ fields:
     schema:
       name: created_at
       table: sessions
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -6688,7 +6714,7 @@ fields:
     schema:
       name: updated_at
       table: sessions
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -6729,12 +6755,12 @@ fields:
       name: id
       table: station_catalog
       data_type: integer
-      default_value: null
+      default_value: nextval('station_catalog_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -6768,7 +6794,7 @@ fields:
     schema:
       name: name
       table: station_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 100
       numeric_precision: null
@@ -6817,7 +6843,7 @@ fields:
     schema:
       name: measurement_type
       table: station_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 20
       numeric_precision: null
@@ -6858,7 +6884,7 @@ fields:
     schema:
       name: default_unit
       table: station_catalog
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 10
       numeric_precision: null
@@ -6979,12 +7005,12 @@ fields:
       name: id
       table: weeks
       data_type: integer
-      default_value: null
+      default_value: nextval('weeks_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
@@ -7021,8 +7047,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -7061,8 +7087,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -7098,7 +7124,7 @@ fields:
     schema:
       name: theme
       table: weeks
-      data_type: varchar
+      data_type: character varying
       default_value: null
       max_length: 255
       numeric_precision: null
@@ -7173,8 +7199,8 @@ fields:
       data_type: integer
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: false
       is_indexed: false
@@ -7290,7 +7316,7 @@ fields:
     schema:
       name: created_at
       table: weeks
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -7330,7 +7356,7 @@ fields:
     schema:
       name: updated_at
       table: weeks
-      data_type: datetime
+      data_type: timestamp without time zone
       default_value: CURRENT_TIMESTAMP
       max_length: null
       numeric_precision: null
@@ -7376,7 +7402,7 @@ relations:
       column: plan_id
       foreign_key_table: plans
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: athlete_profiles_plan_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: block_circuit_stations
@@ -7397,7 +7423,7 @@ relations:
       column: station_id
       foreign_key_table: station_catalog
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_circuit_stations_station_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: block_circuit_stations
@@ -7418,7 +7444,7 @@ relations:
       column: block_circuit_id
       foreign_key_table: block_circuit
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_circuit_stations_block_circuit_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: block_mini_race_stations
@@ -7439,7 +7465,7 @@ relations:
       column: block_mini_race_id
       foreign_key_table: block_mini_race
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_mini_race_stations_block_mini_race_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: block_mini_race_stations
@@ -7460,7 +7486,7 @@ relations:
       column: station_id
       foreign_key_table: station_catalog
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_mini_race_stations_station_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: block_station_activation_entries
@@ -7481,7 +7507,7 @@ relations:
       column: block_station_activation_id
       foreign_key_table: block_station_activation
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_station_activation_entries_block_sta__10713b01_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: block_station_activation_entries
@@ -7502,7 +7528,7 @@ relations:
       column: station_id
       foreign_key_table: station_catalog
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_station_activation_entries_station_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: block_station_block_entries
@@ -7523,7 +7549,7 @@ relations:
       column: station_id
       foreign_key_table: station_catalog
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_station_block_entries_station_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: block_station_block_entries
@@ -7544,7 +7570,7 @@ relations:
       column: block_station_block_id
       foreign_key_table: block_station_block
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_station_block_entries_block_station_block_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: block_strength_exercises
@@ -7565,7 +7591,7 @@ relations:
       column: exercise_id
       foreign_key_table: exercise_catalog
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_strength_exercises_exercise_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: block_strength_exercises
@@ -7586,7 +7612,7 @@ relations:
       column: block_strength_id
       foreign_key_table: block_strength
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: block_strength_exercises_block_strength_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: session_blocks
@@ -7627,7 +7653,7 @@ relations:
       column: session_id
       foreign_key_table: sessions
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: session_blocks_session_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: sessions
@@ -7648,7 +7674,7 @@ relations:
       column: week_id
       foreign_key_table: weeks
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: sessions_week_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
   - collection: weeks
@@ -7669,6 +7695,6 @@ relations:
       column: plan_id
       foreign_key_table: plans
       foreign_key_column: id
-      constraint_name: null
+      constraint_name: weeks_plan_id_foreign
       on_update: NO ACTION
       on_delete: CASCADE
