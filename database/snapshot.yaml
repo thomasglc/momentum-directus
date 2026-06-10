@@ -5932,6 +5932,55 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: plans
+    field: plan_type
+    type: string
+    meta:
+      collection: plans
+      conditions: null
+      display: labels
+      display_options: null
+      field: plan_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Open (solo)
+            value: open_solo
+          - text: Open Double Mixte
+            value: open_double_mixte
+          - text: Open Double Men
+            value: open_double_men
+          - text: Open Double Women
+            value: open_double_women
+      readonly: false
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: plan_type
+      table: plans
+      data_type: character varying
+      default_value: null
+      max_length: 30
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: session_blocks
     field: id
     type: integer
